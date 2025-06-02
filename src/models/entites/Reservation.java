@@ -35,10 +35,19 @@ public class Reservation {
         return TimeUnit.DAYS.convert(duracao, TimeUnit.MILLISECONDS);
     }
 
-    public void atualizarHospedagem(Integer numeroQuarto, Date checagem, Date deschecagem) {
+    public String atualizarHospedagem(Integer numeroQuarto, Date checagem, Date deschecagem) {
+        Date now = new Date();
+        if (checagem.before(now) || deschecagem.before(now)) {
+          return  "Erro na reserva: a data da reserva deve ser feita bo futuro!";
+        }
+        if (!deschecagem.after(checagem)){
+            return "Erro na reserva: a Saida deve ser depois do dia da checagem!";
+        }
+
         this.checagem = checagem;
         this.deschecagem = deschecagem;
         this.numeroQuarto = numeroQuarto;
+        return null;
 
     }
     @Override

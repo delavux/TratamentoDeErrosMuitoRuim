@@ -20,38 +20,24 @@ public class Main {
 
         if (!saida.after(checagem)) {
             System.out.println("Erro na reserva: a Saida deve ser depois do dia da checagem!");
-        }
-        else {
+        } else {
             Reservation reserva = new Reservation(number, checagem, saida);
             System.out.println("Reserva : " + reserva);
 
             System.out.println();
             System.out.println("Coloque a data para atualizar sua reserva: ");
             System.out.println(" Reserve seu dia de chegagem! A checagem deve ser nesse formato: (dd/MM/yyyy) ");
-             checagem = sdf.parse(sc.next());
-
-             Date now = new Date();
-             if (checagem.before(now) || saida.before(now)) {
-                 System.out.println("Erro na reserva: a data da reserva deve ser feita bo futuro!");
-             }
-             else if (!saida.after(checagem)){
-                 System.out.println("Erro na reserva: a Saida deve ser depois do dia da checagem!");
-             }
-             else {
-                 reserva.atualizarHospedagem(number, checagem, saida);
-                 System.out.println("REserva : " + reserva);
-             }
-
-
-
-
-
-
-
+            checagem = sdf.parse(sc.next());
             System.out.print("A saida deve ser nesse formto (dd/MM/yyyy): ");
-             saida = sdf.parse(sc.next());
-             reserva.atualizarHospedagem(number, checagem, saida);
-
+            saida = sdf.parse(sc.next());
+            String error = reserva.atualizarHospedagem(number, checagem, saida);
+            if (error != null){
+                System.out.println("Erro na reserva: "+ error);
+            }
+            else {
+                System.out.println("Reserva: "+ reserva);
+            }
         }
+        sc.close();
     }
 }
