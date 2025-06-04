@@ -1,4 +1,6 @@
-package models.entites;
+package models.entities;
+
+import models.CustomException;  // Nome ajustado
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +12,7 @@ public class Reservation {
     private Date checagem;
     private Date deschecagem;
 
-    private static SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy");
+    private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public Reservation(Integer numeroQuarto, Date checagem, Date deschecagem) {
         this.numeroQuarto = numeroQuarto;
@@ -31,37 +33,33 @@ public class Reservation {
     }
 
     public long duracao() {
-        long duracao = checagem.getTime() - deschecagem.getTime();
+        long duracao = deschecagem.getTime() - checagem.getTime();
         return TimeUnit.DAYS.convert(duracao, TimeUnit.MILLISECONDS);
     }
 
-    public String atualizarHospedagem(Integer numeroQuarto, Date checagem, Date deschecagem) {
+    public void updateDates(Date checagem, Date deschecagem) throws CustomException {
         Date now = new Date();
         if (checagem.before(now) || deschecagem.before(now)) {
-          return  "Erro na reserva: a data da reserva deve ser feita bo futuro!";
+            throw new CustomException("Erro na reserva: a data da reserva deve ser feita no futuro!");
         }
-        if (!deschecagem.after(checagem)){
-            return "Erro na reserva: a Saida deve ser depois do dia da checagem!";
+        if (!deschecagem.after(checagem)) {
+            throw new CustomException("Erro na reserva: a saída deve ser depois do dia da checagem!");
         }
 
         this.checagem = checagem;
         this.deschecagem = deschecagem;
-        this.numeroQuarto = numeroQuarto;
-        return null;
-
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return "Quarto "
                 + numeroQuarto
-                +", checagem: "
-                + sfd.format(checagem)
-                +", saida: "
-                + sfd.format(deschecagem)
-                +","
+                + ", Chegada: "
+                + sdf.format(checagem)
+                + ", Saída: "
+                + sdf.format(deschecagem)
+                + ", "
                 + duracao()
-                +" noites :";
-
-
+                + " noite(s)";
     }
 }
